@@ -12,16 +12,13 @@ object Main extends App {
     .flatMap(_.asArray)
     .getOrElse(Vector.empty)
     .map(ele => {
-      val (short_name, url, osi_approved) = (
+      val (short_name, name, url, osi_approved) = (
         ele.hcursor.focus.flatMap(_.hcursor.get[String]("short_name").toOption).getOrElse(""),
+        ele.hcursor.focus.flatMap(_.hcursor.get[String]("name").toOption).getOrElse(""),
         ele.hcursor.focus.flatMap(_.hcursor.get[String]("url").toOption).getOrElse(""),
         ele.hcursor.focus.flatMap(_.hcursor.get[String]("osi_approved").toOption).getOrElse("")
       )
-
-      val name = ele.hcursor.focus.flatMap(_.hcursor.get[String]("name").toOption).getOrElse("")
-
       val nameNew = if (name.contains("'")) name.replace("'", "''") else name
-
       "('" + short_name + "', '" + nameNew + "', '" + url + "', " + osi_approved + ")"
     })
     .mkString(",\n")
